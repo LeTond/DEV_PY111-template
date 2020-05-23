@@ -15,7 +15,7 @@ def push(elem: Any) -> None:
     """
 
     global lis
-    del lis[0]
+    lis.append(12)
     return None
 
 
@@ -25,8 +25,9 @@ def pop() -> Any:
 
     :return: popped element
     """
-    list_ = [10, 12, 234, 45]
-    return list_
+    global lis
+    lis.pop(0)
+    return lis
 
 
 def peek(ind: int = 0) -> Any:
@@ -36,6 +37,8 @@ def peek(ind: int = 0) -> Any:
     :param ind: index of element (count from the top, 0 - top, 1 - first from top, etc.)
     :return: peeked element or None if no element in this place
     """
+    global lis
+
     print(ind)
     return None
 
@@ -54,6 +57,6 @@ def clear() -> None:
 
 
 if __name__ == "__main__":
-    push()
+    push(0)
     print(pop())
-    # peek()
+    peek()
