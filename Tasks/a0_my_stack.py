@@ -5,8 +5,7 @@ from typing import Any
 
 lis = [1, 3, 4, 4, 56, 7, 7, 4]
 
-
-def push(elem: Any) -> None:
+def push(elem: int) -> None:
     """
     Operation that add element to stack
 
@@ -16,7 +15,8 @@ def push(elem: Any) -> None:
 
     global lis
     lis.append(12)
-    return None
+    lis.clear()
+
 
 
 def pop() -> Any:
@@ -26,8 +26,11 @@ def pop() -> Any:
     :return: popped element
     """
     global lis
-    lis.pop(0)
-    return lis
+
+    if len(lis) == 0:
+        return None
+    else:
+        lis.pop(-1)
 
 
 def peek(ind: int = 0) -> Any:
@@ -59,4 +62,3 @@ def clear() -> None:
 if __name__ == "__main__":
     push(0)
     print(pop())
-    peek()
