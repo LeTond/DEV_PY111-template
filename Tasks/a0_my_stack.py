@@ -11,6 +11,8 @@ def push(elem: Any) -> None:
     :param elem: element to be pushed
     :return: Nothing
     """
+
+
     print(elem)
     return None
 
@@ -21,7 +23,8 @@ def pop() -> Any:
 
     :return: popped element
     """
-    return None
+
+    return 5**2
 
 
 def peek(ind: int = 0) -> Any:
