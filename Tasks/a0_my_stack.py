@@ -3,6 +3,8 @@ My little Stack
 """
 from typing import Any
 
+lis = [1, 3, 4, 4, 56, 7, 7, 4]
+
 
 def push(elem: Any) -> None:
     """
@@ -12,8 +14,8 @@ def push(elem: Any) -> None:
     :return: Nothing
     """
 
-
-    print(elem)
+    global lis
+    del lis[0]
     return None
 
 
@@ -23,8 +25,8 @@ def pop() -> Any:
 
     :return: popped element
     """
-
-    return 5**2
+    list_ = [10, 12, 234, 45]
+    return list_
 
 
 def peek(ind: int = 0) -> Any:
@@ -46,4 +48,12 @@ def clear() -> None:
 
     :return: None
     """
+
+
     return None
+
+
+if __name__ == "__main__":
+    push(10)
+    print(pop())
+    peek()
