@@ -54,6 +54,6 @@ def clear() -> None:
 
 
 if __name__ == "__main__":
-    push(10)
+    push()
     print(pop())
-    peek()
+    # peek()
