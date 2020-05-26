@@ -44,5 +44,5 @@ def clear() -> None:
     return None
 
 
-if __name__ == "__main__":
-    pass
+# if __name__ == "__main__":
+#     dequeue()
