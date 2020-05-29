@@ -14,8 +14,10 @@ def push(elem: int) -> None:
     :return: Nothing
     """
 
+
     global lis
     lis.append(elem)
+
     return None
 
 
@@ -24,6 +26,7 @@ def pop() -> Any:
     Pop element from the top of the stack. If not elements - should return None.
     :return: popped element
     """
+
     global lis
     # lis.append(15)
 
@@ -33,6 +36,7 @@ def pop() -> Any:
         return x
     else:
         return None
+
 
 
 def peek(ind: int = -1) -> Any:
