@@ -1,7 +1,5 @@
 from typing import Sequence, Optional
 
-arr = range(0, 100)
-
 
 def binary_search(elem: int, arr: Sequence) -> Optional[int]:
     """
@@ -27,8 +25,3 @@ def binary_search(elem: int, arr: Sequence) -> Optional[int]:
         return r
     else:
         return None
-
-
-print(10//2)
-print(11//2)
-print(9//2)
