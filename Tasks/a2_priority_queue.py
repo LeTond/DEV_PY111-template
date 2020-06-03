@@ -5,6 +5,8 @@ Queue priorities are from 0 to 5
 """
 from typing import Any
 
+q = []
+
 
 def enqueue(elem: Any, priority: int = 0) -> None:
     """
@@ -13,6 +15,11 @@ def enqueue(elem: Any, priority: int = 0) -> None:
     :param elem: element to be added
     :return: Nothing
     """
+    global q
+    for minimum in range(len(q) + 1):
+        if minimum == priority:
+            q.append(elem)
+            print(q)
     return None
 
 
@@ -22,6 +29,13 @@ def dequeue() -> Any:
 
     :return: dequeued element
     """
+    global q
+    print(f"Длина списка: {len(q)}")
+    if len(q) > 0:
+        x = q[0]
+        q.remove(q[0])
+        print(f"Возвращаемый начальный элемент списка: {x}")
+        return x
     return None
 
 
@@ -32,7 +46,17 @@ def peek(ind: int = 0, priority: int = 0) -> Any:
     :param ind: index of element (count from the beginning)
     :return: peeked element
     """
-    return None
+    global q
+    for minimum in range(len(q) + 1):
+        if minimum == priority:
+            try:
+                top = q[ind]
+                print(f"Приоритет {priority}")
+                print(f"Возвращение top: {top}")
+                return top
+
+            except IndexError:
+                print("IndexError")
 
 
 def clear() -> None:
@@ -41,4 +65,12 @@ def clear() -> None:
 
     :return: None
     """
+    global q
+
+    q = []
+
     return None
+
+
+if __name__ == "__main__":
+    dequeue()
