@@ -4,9 +4,8 @@ Priority Queue
 Queue priorities are from 0 to 5
 """
 from typing import Any
-import numpy as np
 
-q = np.array([], dtype=int)
+q = []
 
 
 def enqueue(elem: Any, priority: int = 0) -> None:
@@ -18,10 +17,12 @@ def enqueue(elem: Any, priority: int = 0) -> None:
     """
     global q
 
-    for minimum in range(0, 11):
-        if minimum == priority:
-            q = np.concatenate([q, [elem]])
-
+    for pr in range(11):
+        if pr == priority:
+            q.append([])
+            q[pr].append(elem)
+        else:
+            q.append([])
     return None
 
 
@@ -33,11 +34,11 @@ def dequeue() -> Any:
     """
     global q
 
-    if q.size > 0:
-        x = q[0]
-        q = np.delete(q, 0)
-
-        return x
+    for pr in range(len(q)):
+        if len(q[pr]) > 0:
+            zero = q[pr][0]
+            del q[pr][0]
+            return zero
     return None
 
 
@@ -51,10 +52,9 @@ def peek(ind: int = 0, priority: int = 0) -> Any:
     global q
 
     try:
-        for minimum in range(0, 11):
-            if minimum == priority:
-                top = q[ind]
-
+        for pr in range(11):
+            if pr == priority:
+                top = q[pr][ind]
                 return top
 
     except IndexError:
@@ -69,7 +69,7 @@ def clear() -> None:
     """
     global q
 
-    q = np.array([], dtype=int)
+    q = []
 
     return None
 
