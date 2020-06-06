@@ -14,7 +14,6 @@ def push(elem: int) -> None:
     :return: Nothing
     """
 
-
     global lis
     lis.append(elem)
 
@@ -36,7 +35,6 @@ def pop() -> Any:
         return x
     else:
         return None
-
 
 
 def peek(ind: int = -1) -> Any:
