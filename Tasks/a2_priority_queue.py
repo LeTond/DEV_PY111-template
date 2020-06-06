@@ -4,8 +4,9 @@ Priority Queue
 Queue priorities are from 0 to 5
 """
 from typing import Any
+import numpy as np
 
-q = []
+q = np.array([], dtype=int)
 
 
 def enqueue(elem: Any, priority: int = 0) -> None:
@@ -16,10 +17,11 @@ def enqueue(elem: Any, priority: int = 0) -> None:
     :return: Nothing
     """
     global q
-    for minimum in range(len(q) + 1):
+
+    for minimum in range(0, 11):
         if minimum == priority:
-            q.append(elem)
-            print(q)
+            q = np.concatenate([q, [elem]])
+
     return None
 
 
@@ -30,11 +32,11 @@ def dequeue() -> Any:
     :return: dequeued element
     """
     global q
-    print(f"Длина списка: {len(q)}")
-    if len(q) > 0:
+
+    if q.size > 0:
         x = q[0]
-        q.remove(q[0])
-        print(f"Возвращаемый начальный элемент списка: {x}")
+        q = np.delete(q, 0)
+
         return x
     return None
 
@@ -47,16 +49,16 @@ def peek(ind: int = 0, priority: int = 0) -> Any:
     :return: peeked element
     """
     global q
-    for minimum in range(len(q) + 1):
-        if minimum == priority:
-            try:
+
+    try:
+        for minimum in range(0, 11):
+            if minimum == priority:
                 top = q[ind]
-                print(f"Приоритет {priority}")
-                print(f"Возвращение top: {top}")
+
                 return top
 
-            except IndexError:
-                print("IndexError")
+    except IndexError:
+        print("IndexError")
 
 
 def clear() -> None:
@@ -67,7 +69,7 @@ def clear() -> None:
     """
     global q
 
-    q = []
+    q = np.array([], dtype=int)
 
     return None
 
