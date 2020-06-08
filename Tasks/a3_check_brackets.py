@@ -1,3 +1,7 @@
+
+from Tasks import a0_my_stack as stack
+
+
 def check_brackets(brackets_row: str) -> bool:
     """
     Check whether input string is a valid bracket sequence
@@ -7,9 +11,23 @@ def check_brackets(brackets_row: str) -> bool:
     """
     import regex
 
-    if regex.search(r"^(\((?1)*\))(?1)*$", brackets_row):
-        return True
-    elif brackets_row == "":
-        return True
-    return False
+    stack.clear()
 
+    for simb in brackets_row:
+        if simb == "(":
+            stack.push(")")
+        elif simb == ")":
+            if simb != stack.pop():
+                return False
+    if len(stack.lis) != 0:
+        return False
+    return True
+
+
+if __name__ == "__main__":
+    print(check_brackets("()()"))
+    print(check_brackets(""))
+    print(check_brackets("()()(()()))"))
+    print(check_brackets(")("))
+    print(check_brackets(")"))
+    print(check_brackets("("))
