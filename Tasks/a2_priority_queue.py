@@ -4,6 +4,9 @@ Priority Queue
 Queue priorities are from 0 to 5
 """
 from typing import Any
+from collections import deque
+
+q = deque()
 
 q = []
 
@@ -23,6 +26,7 @@ def enqueue(elem: Any, priority: int = 0) -> None:
             q[pr].append(elem)
         else:
             q.append([])
+
     return None
 
 
@@ -39,6 +43,7 @@ def dequeue() -> Any:
             zero = q[pr][0]
             del q[pr][0]
             return zero
+
     return None
 
 
@@ -59,6 +64,7 @@ def peek(ind: int = 0, priority: int = 0) -> Any:
 
     except IndexError:
         print("IndexError")
+
 
 
 def clear() -> None:
