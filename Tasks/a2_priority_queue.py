@@ -8,6 +8,8 @@ from collections import deque
 
 q = deque()
 
+q = []
+
 
 def enqueue(elem: Any, priority: int = 0) -> None:
     """
@@ -17,10 +19,14 @@ def enqueue(elem: Any, priority: int = 0) -> None:
     :return: Nothing
     """
     global q
-    for minimum in range(len(q) + 1):
-        if minimum == priority:
-            q.append(elem)
-            print(q)
+
+    for pr in range(11):
+        if pr == priority:
+            q.append([])
+            q[pr].append(elem)
+        else:
+            q.append([])
+
     return None
 
 
@@ -31,12 +37,12 @@ def dequeue() -> Any:
     :return: dequeued element
     """
     global q
-    print(f"Длина списка: {len(q)}")
-    if len(q) >= 1:
-        x = q[0]
-        q.remove(q[0])
-        print(f"Возвращаемый начальный элемент списка: {x}")
-        return x
+
+    for pr in range(len(q)):
+        if len(q[pr]) > 0:
+            zero = q[pr][0]
+            del q[pr][0]
+            return zero
 
     return None
 
@@ -49,16 +55,16 @@ def peek(ind: int = 0, priority: int = 0) -> Any:
     :return: peeked element
     """
     global q
-    for minimum in range(len(q) + 1):
-        if minimum == priority:
-            try:
-                top = q[ind]
-                print(f"Приоритет {priority}")
-                print(f"Возвращение top: {top}")
+
+    try:
+        for pr in range(11):
+            if pr == priority:
+                top = q[pr][ind]
                 return top
 
-            except IndexError:
-                print("IndexError")
+    except IndexError:
+        print("IndexError")
+
 
 
 def clear() -> None:
