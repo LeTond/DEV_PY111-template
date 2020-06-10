@@ -14,36 +14,29 @@ def calculate_paths(shape: (int, int), point: (int, int)) -> int:
     M, N = chess_board_.shape
     chess_board_[0][0] = 1
     n = 1
+    cicle = 0
     while n < M:
-        for j in range(n - 1, M):
-            for i in range(n - 1, N):
-                if chess_board_[j][i] != 0:
-                    if n - 1 < (j + 2) < M and 0 < (i + 1) < N:
-                        chess_board_[j + 2][i + 1] = chess_board_[j][i] + 1
-                        if M - 1 == j + 2 and N - 1 == i + 1:
-                            counter += 2 ** (chess_board_[point[0]][point[1]] - 1)
-                            chess_board_[point[0]][point[1]] = 0
-                    if n - 1 < (j + 1) < M and 0 < (i + 2) < N:
-                        chess_board_[j + 1][i + 2] = chess_board_[j][i] + 1
-                        if M - 1 == j + 1 and N - 1 == i + 2:
-                            counter += 2 ** (chess_board_[point[0]][point[1]] - 1)
-                            chess_board_[point[0]][point[1]] = 0
-                    if n - 1 < (j + 1) < M and 0 <= (i - 2) < N:
-                        chess_board_[j + 1][i - 2] = chess_board_[j][i] + 1
-                        if M - 1 == j + 1 and N - 1 == i - 2:
-                            counter += 2 ** (chess_board_[point[0]][point[1]] - 1)
-                            chess_board_[point[0]][point[1]] = 0
-                    if n - 1 < (j + 2) < M and 0 <= (i - 1) < N:
-                        chess_board_[j + 2][i - 1] = chess_board_[j][i] + 1
-                        if M - 1 == j + 2 and N - 1 == i - 1:
-                            counter += 2 ** (chess_board_[point[0]][point[1]] - 1)
-                            chess_board_[point[0]][point[1]] = 0
+        for j in range(0, M-2):
+            for i in range(0, N-1):
+                try:
+                    if chess_board_[j][i] != 0:
+                        chess_board_[j + 2][i + 1] = 2 * chess_board_[j][i]
+                        chess_board_[j + 1][i + 2] = 2 * chess_board_[j][i]
+                        if i >= 2:
+                            chess_board_[j + 1][i - 2] = 2 * chess_board_[j][i]
+                        if i >= 1:
+                            chess_board_[j + 2][i - 1] = 2 * chess_board_[j][i]
+
+                    if chess_board_[point[0]][point[1]] > 0:
+                        counter += chess_board_[point[0]][point[1]]
+                        cicle += 1
+                        chess_board_[point[0]][point[1]] = 0
+                except IndexError:
+                    None
 
         n += 1
-    print(chess_board_)
-    print("__________________")
+    print(cicle)
     return counter
 
-
 if __name__ == "__main__":
-    print(calculate_paths((5, 5), (4, 4)))
+    print(calculate_paths((8, 8), (7, 7)))
