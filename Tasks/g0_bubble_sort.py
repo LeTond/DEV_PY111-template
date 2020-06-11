@@ -10,7 +10,8 @@ def sort(container: List[int]) -> List[int]:
     :return: container sorted in ascending order
     """
     n = 0
-    while n < len(container):
+    lenght = len(container)
+    while n < lenght:
         for i in range(1, len(container)):
             if container[i] < container[i-1]:
                 container[i], container[i-1] = container[i-1], container[i]
