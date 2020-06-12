@@ -9,15 +9,13 @@ def sort(container: List[int]) -> List[int]:
     :param container: container of elements to be sorted
     :return: container sorted in ascending order
     """
-    n = 0
-    lenght = len(container)
-    while n < lenght:
+    exit = True
+    while exit:
+        exit = False
         for i in range(1, len(container)):
             if container[i] < container[i-1]:
                 container[i], container[i-1] = container[i-1], container[i]
-            elif container[i] == container[i-1]:
-               pass
-        n += 1
+                exit = True
     return container
 
 
