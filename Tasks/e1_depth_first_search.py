@@ -14,20 +14,20 @@ def dfs(g: nx.Graph, start_node: Hashable) -> List[Hashable]:
     :param start_node: starting node of search
     :return: list of nodes in the visited order
     """
-    g2 = nx.Graph()
-    list_ = list(g.neighbors(start_node))
-    g2.add_node(start_node)
 
-    while len(list(g2.nodes)) < len(list(g.nodes)):
-        if list_[0] in list(g2.nodes):
+    list2 = []
+    list_ = list(g.neighbors(start_node))
+    list2.append(start_node)
+
+    while len(list_) > 0:
+
+        if list_[0] in list2:
             list_.remove(list_[0])
         else:
-            g2.add_node(list_[0])
-            list_2 = list(g.neighbors(list_[0]))
+            list2.append(list_[0])
+            list_ = list(g.neighbors(list_[0])) + list_
             list_.remove(list_[0])
-            for i in range(len(list_2) - 1):
-                if list_2[0] in list(g2.nodes):
-                    list_2.remove(list_2[0])
-            list_ = list_2 + list_
-
-    return list(g2.nodes)
+            for i in range(len(list_) - 1):
+                if list_[0] in list2:
+                    list_.remove(list_[0])
+    return list2
