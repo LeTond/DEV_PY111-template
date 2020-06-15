@@ -19,21 +19,27 @@
 """
 
 # Реализация каталога через словарь словарей
-book_list = {'id1': {'style': 'Фантастика', 'auotor': "Желязны", 'work': "Девять принцев Амбера", 'Year': "1970"},
-             'id2': {'style': 'Фантастика', 'auotor': "Желязны", 'work': "Ружья Авалона", 'Year': "1972"},
-             'id3': {'style': 'Фантастика', 'auotor': "Желязны", 'work': "Знак Единорога", 'Year': "1975"},
-             'id4': {'style': 'Фантастика', 'auotor': "Желязны", 'work': "Рука Оберона", 'Year': "1976"},
-             'id5': {'style': 'Детектив', 'auotor': "Дойл", 'work': "Скандал в Богемии", 'Year': "1982"},
-             'id6': {'style': 'Детектив', 'auotor': "Дойл", 'work': "Союз рыжих", 'Year': "1982"}}
+book_list = {
+    1: {'style': 'Фантастика', 'author': "Желязны", 'work': "Девять принцев Амбера", 'year': "1970"},
+    2: {'style': 'Фантастика', 'author': "Желязны", 'work': "Ружья Авалона", 'year': "1972"},
+    3: {'style': 'Фантастика', 'author': "Желязны", 'work': "Знак Единорога", 'year': "1975"},
+    4: {'style': 'Фантастика', 'author': "Желязны", 'work': "Рука Оберона", 'year': "1976"},
+    5: {'style': 'Детектив', 'author': "Дойл", 'work': "Скандал в Богемии", 'year': "1982"},
+    6: {'style': 'Детектив', 'author': "Дойл", 'work': "Союз рыжих", 'year': "1982"}
+            }
 
 name1 = input("Введите имя: ")
 flag = True
 
 for search_book_list in book_list:
-    if book_list[search_book_list]['work'] == name1:
-        print(f"Автор: {book_list[search_book_list]['auotor']} / "
+    if book_list[search_book_list]['style'] == name1 \
+            or book_list[search_book_list]['work'] == name1 \
+            or book_list[search_book_list]['author'] == name1 \
+            or book_list[search_book_list]['year'] == name1:
+        print(f"Жанр: {book_list[search_book_list]['style']} / "
+              f"Автор: {book_list[search_book_list]['author']} / "
               f"Произведение: {book_list[search_book_list]['work']} / "
-              f"Год издания: {book_list[search_book_list]['Year']}")
+              f"Год издания: {book_list[search_book_list]['year']}")
         flag = False
 if flag:
     print('нет такого значения')
