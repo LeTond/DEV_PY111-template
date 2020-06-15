@@ -17,6 +17,8 @@
 (т.е. сохранять библиотеку в внешнем файле и подгружать обратно). Также необходимо оформить точку входа,
 поддерживать поиск по различным параметрам и обеспечить интерфейс взаимодействия пользователя с библиотекой.
 """
+import json
+
 
 # Реализация каталога через словарь словарей
 book_list = {
@@ -28,18 +30,53 @@ book_list = {
     6: {'style': 'Детектив', 'author': "Дойл", 'work': "Союз рыжих", 'year': "1982"}
             }
 
-name1 = input("Введите имя: ")
-flag = True
+book_add = {
+    7: {'style': 'Детектив', 'author': "Дойл", 'work': "Собака Баскервилей", 'year': "1901"}
+            }
 
-for search_book_list in book_list:
-    if book_list[search_book_list]['style'] == name1 \
-            or book_list[search_book_list]['work'] == name1 \
-            or book_list[search_book_list]['author'] == name1 \
-            or book_list[search_book_list]['year'] == name1:
-        print(f"Жанр: {book_list[search_book_list]['style']} / "
-              f"Автор: {book_list[search_book_list]['author']} / "
-              f"Произведение: {book_list[search_book_list]['work']} / "
-              f"Год издания: {book_list[search_book_list]['year']}")
-        flag = False
-if flag:
-    print('нет такого значения')
+json_file = 'library'
+
+def library_from_json(json_file, book_list):
+    # with open(json_file, "w", encoding="utf-8") as file:
+    #     json.dump(book_list, file)
+    #     print(json.dumps(book_list, indent=4, ensure_ascii=False))
+    with open(json_file, 'r') as file:
+        template = json.load(file)
+
+        with open(json_file, "w", encoding="utf-8") as file:
+
+            # Добавляем новую книгу с новым ключем
+            template['7'] = {'style': 'Детектив', 'author': "Не Дойл", 'work': "Собака Баскервилей", 'year': "1901"}
+            # Удаляем книгу по ключю
+            # template.pop('7', None)
+            json.dump(template, file)
+            print(json.dumps(template, indent=4, ensure_ascii=False))
+            # print(template)
+            # print(template.keys())
+
+
+def search_in_library(json_file):
+
+    search_key_name = input("Введите имя: ")
+    flag = True
+
+    with open(json_file, 'r') as file:
+        template = json.load(file)
+
+        for search_book_list in template:
+            if template[search_book_list]['style'] == search_key_name \
+                    or template[search_book_list]['work'] == search_key_name \
+                    or template[search_book_list]['author'] == search_key_name \
+                    or template[search_book_list]['year'] == search_key_name:
+                print(f"Жанр: {template[search_book_list]['style']} / "
+                      f"Автор: {template[search_book_list]['author']} / "
+                      f"Произведение: {template[search_book_list]['work']} / "
+                      f"Год издания: {template[search_book_list]['year']}")
+                flag = False
+        if flag:
+            print('Данная книга отсутствует в библиотеке')
+
+
+if __name__ == '__main__':
+    library_from_json(json_file, book_list)
+    search_in_library(json_file)
