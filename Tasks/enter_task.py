@@ -17,8 +17,8 @@
 (т.е. сохранять библиотеку в внешнем файле и подгружать обратно). Также необходимо оформить точку входа,
 поддерживать поиск по различным параметрам и обеспечить интерфейс взаимодействия пользователя с библиотекой.
 """
+from Tasks.GUI import *
 import json
-
 
 # Реализация каталога через словарь словарей
 book_list = {
@@ -28,15 +28,16 @@ book_list = {
     4: {'style': 'Фантастика', 'author': "Желязны", 'work': "Рука Оберона", 'year': "1976"},
     5: {'style': 'Детектив', 'author': "Дойл", 'work': "Скандал в Богемии", 'year': "1982"},
     6: {'style': 'Детектив', 'author': "Дойл", 'work': "Союз рыжих", 'year': "1982"}
-            }
+}
 
 book_add = {
     7: {'style': 'Детектив', 'author': "Дойл", 'work': "Собака Баскервилей", 'year': "1901"}
-            }
+}
 
 json_file = 'library'
 
-def library_from_json(json_file, book_list):
+
+def library_from_json(json_file):
     # with open(json_file, "w", encoding="utf-8") as file:
     #     json.dump(book_list, file)
     #     print(json.dumps(book_list, indent=4, ensure_ascii=False))
@@ -44,7 +45,6 @@ def library_from_json(json_file, book_list):
         template = json.load(file)
 
         with open(json_file, "w", encoding="utf-8") as file:
-
             # Добавляем новую книгу с новым ключем
             template['7'] = {'style': 'Детектив', 'author': "Не Дойл", 'work': "Собака Баскервилей", 'year': "1901"}
             # Удаляем книгу по ключю
@@ -57,7 +57,8 @@ def library_from_json(json_file, book_list):
 
 def search_in_library(json_file):
 
-    search_key_name = input("Введите имя: ")
+    search_key_name = input("Введите ключевое слово: ")
+
     flag = True
 
     with open(json_file, 'r') as file:
@@ -68,15 +69,22 @@ def search_in_library(json_file):
                     or template[search_book_list]['work'] == search_key_name \
                     or template[search_book_list]['author'] == search_key_name \
                     or template[search_book_list]['year'] == search_key_name:
-                print(f"Жанр: {template[search_book_list]['style']} / "
-                      f"Автор: {template[search_book_list]['author']} / "
-                      f"Произведение: {template[search_book_list]['work']} / "
-                      f"Год издания: {template[search_book_list]['year']}")
+                print_ = f"№: {search_book_list} / " \
+                         f"Жанр: {template[search_book_list]['style']} / " \
+                         f"Автор: {template[search_book_list]['author']} / " \
+                         f"Произведение: {template[search_book_list]['work']} / " \
+                         f"Год издания: {template[search_book_list]['year']}"
+
+                # print(print_)
                 flag = False
+                gui_interface(print_)
         if flag:
-            print('Данная книга отсутствует в библиотеке')
+            print_ = 'Данная книга отсутствует в библиотеке'
+            # print(print_)
+            gui_interface(print_)
 
 
 if __name__ == '__main__':
-    library_from_json(json_file, book_list)
+    library_from_json(json_file)
     search_in_library(json_file)
+
