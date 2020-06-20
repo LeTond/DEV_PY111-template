@@ -57,8 +57,10 @@ def library_from_json(json_file):
 
 def search_in_library(json_file):
 
+    list_book = ""
+    # gui_interface(list_book)
     search_key_name = input("Введите ключевое слово: ")
-
+    # search_key_name = text
     flag = True
 
     with open(json_file, 'r') as file:
@@ -74,15 +76,12 @@ def search_in_library(json_file):
                          f"Автор: {template[search_book_list]['author']} / " \
                          f"Произведение: {template[search_book_list]['work']} / " \
                          f"Год издания: {template[search_book_list]['year']}"
-
-                # print(print_)
+                list_book += print_ + '\n'
                 flag = False
-                gui_interface(print_)
         if flag:
             print_ = 'Данная книга отсутствует в библиотеке'
-            # print(print_)
             gui_interface(print_)
-
+    gui_interface(list_book)
 
 if __name__ == '__main__':
     library_from_json(json_file)
