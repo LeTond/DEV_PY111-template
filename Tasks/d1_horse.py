@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def calculate_paths(shape: (int, int), point: (int, int)) -> int:
     """
     Given field with size rows*cols count available paths from (0, 0) to point
@@ -6,5 +9,28 @@ def calculate_paths(shape: (int, int), point: (int, int)) -> int:
     :param point: desired point for horse
     :return: count of paths from (1, 1) to (point[0], point[1]) (numerating from 0, so (0, 0) - left bottom tile)
     """
-    print(shape, point)
-    return 0
+
+    chess_board_ = np.zeros(shape)
+    M, N = chess_board_.shape
+    chess_board_[0][0] = 1
+
+    for j in range(0, M):
+        for i in range(0, N):
+            if chess_board_[j][i] != 0:
+                try:
+                    if j <= M - 3 and i <= N - 2:
+                        chess_board_[j + 2][i + 1] += 2 * chess_board_[j][i]
+                    if j <= M - 2 and i <= N - 3:
+                        chess_board_[j + 1][i + 2] += 2 * chess_board_[j][i]
+                    if i >= 2:
+                        chess_board_[j + 1][i - 2] += 2 * chess_board_[j][i]
+                    if i >= 1:
+                        chess_board_[j + 2][i - 1] += 2 * chess_board_[j][i]
+                except IndexError:
+                    None
+
+    print(chess_board_)
+    return chess_board_[point[0]][point[1]]
+
+if __name__ == "__main__":
+    print(calculate_paths((17, 12), (16, 9)))
