@@ -32,5 +32,34 @@ def calculate_paths(shape: (int, int), point: (int, int)) -> int:
     print(chess_board_)
     return chess_board_[point[0]][point[1]]
 
+
+def reverse_horse(point, shape, lvl, max_lvl):
+    """
+    Количество минимальных шагов, которыми можем прийти из клетки в клетку
+    :param point:
+    :param shape:
+    :return: минимально количество шагов
+    """
+    x, y = point
+    if point == (0, 0):
+        return 0
+    l = []
+    if lvl > max_lvl:
+        return 1005
+
+    if y - 2 >= 0 and x - 1 >= 0:
+        l.append(reverse_horse((x - 1, y - 2), shape, lvl+1, max_lvl))
+    if y - 2 >= 0 and x + 1 < shape[0]:
+        l.append(reverse_horse((x + 1, y - 2), shape, lvl+1, max_lvl))
+    if y - 1 >= 0 and x + 2 < shape[0]:
+        l.append(reverse_horse((x + 2, y - 1), shape, lvl+1, max_lvl))
+    if y - 1 >= 0 and x - 2 >= 0:
+        l.append(reverse_horse((x - 2, y - 1), shape, lvl+1, max_lvl))
+    if l:
+        return min(l) + 1
+    else:
+        return 1005
+
 if __name__ == "__main__":
-    print(calculate_paths((17, 12), (16, 9)))
+    # print(calculate_paths((17, 12), (16, 9)))
+    print(reverse_horse((20, 20), (21, 21), 0, 16))
