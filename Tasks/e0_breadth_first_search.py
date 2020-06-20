@@ -19,15 +19,10 @@ def bfs(g: nx.Graph, start_node: Hashable) -> List[Hashable]:
 
     while len(list(g2.nodes)) < len(list(g.nodes)):
         for i in range(len(list_) - 1):
-            if list_[i] == list(g2.nodes)[0]:
-                list_.remove(list_[i])
-        else:
-            g2.add_node(list_[0])
-            list_ += list(g.neighbors(list_[0]))
+            if list_[i] != list(g2.nodes)[0]:
+                g2.add_node(list_[0])
+                list_ += list(g.neighbors(list_[0]))
             list_.remove(list_[0])
     # nx.draw(g, with_labels=True)
     # plt.show()
     return list(g2.nodes)
-
-# if __name__ == '__main__':
-# bfs(graph, start_node="A")
