@@ -7,60 +7,133 @@
 Пример запуска кода:
 python3 Tasks/enter_task.py show
 python3 Tasks/enter_task.py -key Дойл show
-python3 Tasks/enter_task.py -bk 8 -st Фантастика -au Ефремов -wo 'Туманность Андромеды' -ye 1957 save
+python3 Tasks/enter_task.py -st Фантастика -au Ефремов -wo 'Туманность Андромеды' -ye 1957 save
+python3 Tasks/enter_task.py -st Фантастика -au Ефремов -wo 'Час Быка' -ye 1970 save
 python3 Tasks/enter_task.py -bk 8 delete
 """
 import argparse
 import json
 
 json_file = 'Tasks/library'
+json_file2 = 'library'
 list_book = ""
+book_list = {
+    1: {'style': 'Фантастика', 'author': "Желязны", 'work': "Девять принцев Амбера", 'year': "1970"},
+    2: {'style': 'Фантастика', 'author': "Желязны", 'work': "Ружья Авалона", 'year': "1972"},
+    3: {'style': 'Фантастика', 'author': "Желязны", 'work': "Знак Единорога", 'year': "1975"},
+    4: {'style': 'Фантастика', 'author': "Желязны", 'work': "Рука Оберона", 'year': "1976"},
+    5: {'style': 'Детектив', 'author': "Дойл", 'work': "Скандал в Богемии", 'year': "1982"},
+    6: {'style': 'Детектив', 'author': "Дойл", 'work': "Союз рыжих", 'year': "1982"}
+}
 
 
-def search_in_library(json_file: str, list_book: str) -> None:
+def line_profile(func):
+    def wrapper(*args, **kwargs):
+        from line_profiler import LineProfiler
+        prof = LineProfiler()
+        try:
+            return prof(func)(*args, **kwargs)
+        finally:
+            prof.print_stats()
+    return wrapper
+
+
+# Создание исходной библиотеки
+def js(book_list):
+    with open(json_file2, 'w', encoding="utf-8") as file:
+        json.dump(book_list, file)
+
+
+# Если json пуст, добавляем нулевой элемент
+def if_empty_json(json_file):
+    with open(json_file, "w") as file:
+        json.dump({0: {'style': 'Style', 'author': 'Author', 'work': 'Work', 'year': 'Year'}}, file)
+
+
+# Поиск по ключевому слову в библиотеке
+def find_in_json_data(json_file: str, list_book: str):
     parser = create_parser()
     namespace = parser.parse_args()
     search_key_name = namespace.key_word
 
     flag = True
-    if namespace.command == 'show':
-        with open(json_file, 'r') as file:
-            template = json.load(file)
-            for search_book_list in template:
-                print_ = f"№: {search_book_list} / " \
-                         f"Жанр: {template[search_book_list]['style']} / " \
-                         f"Автор: {template[search_book_list]['author']} / " \
-                         f"Произведение: {template[search_book_list]['work']} / " \
-                         f"Год издания: {template[search_book_list]['year']}"
-                if template[search_book_list]['style'] == search_key_name \
-                        or template[search_book_list]['work'] == search_key_name \
-                        or template[search_book_list]['author'] == search_key_name \
-                        or template[search_book_list]['year'] == search_key_name:
-                    list_book += print_ + '\n'
-                    flag = False
-                if search_key_name == None:
-                    print(print_)
-                    flag = False
-            if flag:
-                print_ = 'Данная книга отсутствует в библиотеке'
+    with open(json_file, 'r') as file:
+        template = json.load(file)
+        for search_book_list in template:
+            print_ = f"№: {search_book_list} / " \
+                     f"{template[search_book_list]['style']} / " \
+                     f"{template[search_book_list]['author']} / " \
+                     f"{template[search_book_list]['work']} / " \
+                     f"{template[search_book_list]['year']}"
+            if search_key_name == None:
                 print(print_)
-        print(list_book)
+                flag = False
+            elif template[search_book_list]['style'] == search_key_name \
+                    or template[search_book_list]['work'] == search_key_name \
+                    or template[search_book_list]['author'] == search_key_name \
+                    or template[search_book_list]['year'] == search_key_name:
+                list_book += print_ + '\n'
+                flag = False
+        if flag:
+            print_ = 'Данная книга отсутствует в библиотеке'
+            print(print_)
+    print(list_book)
+
+
+# Добавление нового произвдения в библиотеку
+def input_to_json_data(json_file):
+    parser = create_parser()
+    namespace = parser.parse_args()
+    with open(json_file, 'r') as file:
+        template = json.load(file)
+        with open(json_file, 'w', encoding="utf-8") as file:
+            print(template.keys())
+            for i in range(1, len(template) + 2):
+                if f'{i}' not in template:
+                    book_ = i
+                    break
+            template[book_] = {'style': namespace.style,
+                               'author': namespace.author,
+                               'work': namespace.work,
+                               'year': namespace.year}
+            json.dump(template, file)
+
+
+# Удаление из библиотеки произведения под номером -bk number
+def delete_from_json_data(json_file: str):
+    parser = create_parser()
+    namespace = parser.parse_args()
+    with open(json_file, 'r') as file:
+        template = json.load(file)
+        with open(json_file, "w", encoding="utf-8") as file:
+            template.pop(namespace.book, None)
+            json.dump(template, file)
+
+
+# @line_profile
+# Скелет программы
+def work_with_library(json_file: str) -> None:
+    parser = create_parser()
+    namespace = parser.parse_args()
+
+    if namespace.command == 'show':
+        try:
+            find_in_json_data(json_file, list_book)
+        except json.decoder.JSONDecodeError:
+            print("Проверьте, есть ли в вашей библиотеке хоть что-то...")
+
     elif namespace.command == 'save':
-        with open(json_file, 'r') as file:
-            template = json.load(file)
-            with open(json_file, "w", encoding="utf-8") as file:
-                template[namespace.book] = {'style': namespace.style,
-                                            'author': namespace.author,
-                                            'work': namespace.work,
-                                            'year': namespace.year}
-                json.dump(template, file)
+        try:
+            input_to_json_data(json_file)
+        except FileNotFoundError:
+            return None
+        except json.decoder.JSONDecodeError:
+            if_empty_json(json_file)
+            input_to_json_data(json_file)
 
     elif namespace.command == 'delete':
-        with open(json_file, 'r') as file:
-            template = json.load(file)
-            with open(json_file, "w", encoding="utf-8") as file:
-                template.pop(namespace.book, None)
-                json.dump(template, file)
+        delete_from_json_data(json_file)
+
 
 def create_parser():
     parser = argparse.ArgumentParser()
@@ -99,17 +172,16 @@ def create_parser():
 
 
 def create_show_subparser(subparsers):
-    show_parser = subparsers.add_parser('show', help="Режим вывода в консоль")
+    show_parser = subparsers.add_parser('show', help="Режим вывода списка произведений в консоль")
 
 
 def create_save_subparser(subparsers):
-    save_parser = subparsers.add_parser('save', help="Режим добавления в файл")
+    save_parser = subparsers.add_parser('save', help="Режим добавления в библиотеку")
 
 
 def create_delete_subparser(subparsers):
     delete_parser = subparsers.add_parser('delete', help="Режим удаления книги из библиотеки")
 
+
 if __name__ == '__main__':
-    search_in_library(json_file, list_book)
-
-
+    work_with_library(json_file)
