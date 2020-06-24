@@ -4,6 +4,11 @@
 (т.е. сохранять библиотеку в внешнем файле и подгружать обратно). Также необходимо оформить точку входа,
 поддерживать поиск по различным параметрам и обеспечить интерфейс взаимодействия пользователя с библиотекой.
 
+Для добавления нового произведения следует указывать его жанр (по флагу -st), автора (по флагу -au),
+название произведения (по флагу -wo), год издания (по флагу -ye) и условие save
+Для удаления из библиотеки указывается номер в библиотеке (по флагу -bk) и условие delete
+Для поиска указывается ключевое слово (по флагу -key) и условие show
+
 Пример запуска кода:
 python3 Tasks/enter_task.py show
 python3 Tasks/enter_task.py -key Дойл show
@@ -14,17 +19,18 @@ python3 Tasks/enter_task.py -bk 8 delete
 import argparse
 import json
 
-json_file = 'Tasks/library'
-json_file2 = 'library'
+json_file = 'library'
 list_book = ""
-book_list = {
-    1: {'style': 'Фантастика', 'author': "Желязны", 'work': "Девять принцев Амбера", 'year': "1970"},
-    2: {'style': 'Фантастика', 'author': "Желязны", 'work': "Ружья Авалона", 'year': "1972"},
-    3: {'style': 'Фантастика', 'author': "Желязны", 'work': "Знак Единорога", 'year': "1975"},
-    4: {'style': 'Фантастика', 'author': "Желязны", 'work': "Рука Оберона", 'year': "1976"},
-    5: {'style': 'Детектив', 'author': "Дойл", 'work': "Скандал в Богемии", 'year': "1982"},
-    6: {'style': 'Детектив', 'author': "Дойл", 'work': "Союз рыжих", 'year': "1982"}
-}
+
+
+# book_list = {
+#     1: {'style': 'Фантастика', 'author': "Желязны", 'work': "Девять принцев Амбера", 'year': "1970"},
+#     2: {'style': 'Фантастика', 'author': "Желязны", 'work': "Ружья Авалона", 'year': "1972"},
+#     3: {'style': 'Фантастика', 'author': "Желязны", 'work': "Знак Единорога", 'year': "1975"},
+#     4: {'style': 'Фантастика', 'author': "Желязны", 'work': "Рука Оберона", 'year': "1976"},
+#     5: {'style': 'Детектив', 'author': "Дойл", 'work': "Скандал в Богемии", 'year': "1982"},
+#     6: {'style': 'Детектив', 'author': "Дойл", 'work': "Союз рыжих", 'year': "1982"}
+# }
 
 
 def line_profile(func):
@@ -35,23 +41,24 @@ def line_profile(func):
             return prof(func)(*args, **kwargs)
         finally:
             prof.print_stats()
+
     return wrapper
 
 
-# Создание исходной библиотеки
-def js(book_list):
-    with open(json_file2, 'w', encoding="utf-8") as file:
+# Для создания исходной библиотеки
+def js(book_list: str) -> None:
+    with open(json_file, 'w', encoding="utf-8") as file:
         json.dump(book_list, file)
 
 
 # Если json пуст, добавляем нулевой элемент
-def if_empty_json(json_file):
+def if_empty_json(json_file: str) -> None:
     with open(json_file, "w") as file:
         json.dump({0: {'style': 'Style', 'author': 'Author', 'work': 'Work', 'year': 'Year'}}, file)
 
 
 # Поиск по ключевому слову в библиотеке
-def find_in_json_data(json_file: str, list_book: str):
+def find_in_json_data(json_file: str, list_book: str) -> None:
     parser = create_parser()
     namespace = parser.parse_args()
     search_key_name = namespace.key_word
@@ -59,55 +66,62 @@ def find_in_json_data(json_file: str, list_book: str):
     flag = True
     with open(json_file, 'r') as file:
         template = json.load(file)
-        for search_book_list in template:
-            print_ = f"№: {search_book_list} / " \
-                     f"{template[search_book_list]['style']} / " \
-                     f"{template[search_book_list]['author']} / " \
-                     f"{template[search_book_list]['work']} / " \
-                     f"{template[search_book_list]['year']}"
-            if search_key_name == None:
-                print(print_)
-                flag = False
-            elif template[search_book_list]['style'] == search_key_name \
-                    or template[search_book_list]['work'] == search_key_name \
-                    or template[search_book_list]['author'] == search_key_name \
-                    or template[search_book_list]['year'] == search_key_name:
-                list_book += print_ + '\n'
-                flag = False
-        if flag:
-            print_ = 'Данная книга отсутствует в библиотеке'
+    for search_book_list in template:
+        print_ = f"№: {search_book_list} / " \
+                 f"{template[search_book_list]['style']} / " \
+                 f"{template[search_book_list]['author']} / " \
+                 f"{template[search_book_list]['work']} / " \
+                 f"{template[search_book_list]['year']}"
+        if search_key_name == None:
             print(print_)
+            flag = False
+        elif search_key_name in template[search_book_list]['style'] \
+                or search_key_name in template[search_book_list]['work'] \
+                or search_key_name in template[search_book_list]['author'] \
+                or search_key_name in template[search_book_list]['year']:
+            list_book += print_ + '\n'
+            flag = False
+    if flag:
+        print_ = 'Данная книга отсутствует в библиотеке'
+        print(print_)
     print(list_book)
 
 
 # Добавление нового произвдения в библиотеку
-def input_to_json_data(json_file):
+def input_to_json_data(json_file: str) -> None:
     parser = create_parser()
     namespace = parser.parse_args()
     with open(json_file, 'r') as file:
         template = json.load(file)
-        with open(json_file, 'w', encoding="utf-8") as file:
-            print(template.keys())
-            for i in range(1, len(template) + 2):
-                if f'{i}' not in template:
-                    book_ = i
-                    break
-            template[book_] = {'style': namespace.style,
-                               'author': namespace.author,
-                               'work': namespace.work,
-                               'year': namespace.year}
-            json.dump(template, file)
+    for i in range(1, len(template) + 2):
+        if f'{i}' not in template:
+            book_ = i
+            break
+    if namespace.style is None:
+        namespace.style = "Неизвестно"
+    if namespace.work is None:
+        namespace.work = "Неизвестно"
+    if namespace.author is None:
+        namespace.author = "Неизвестно"
+    if namespace.year is None:
+        namespace.year = "Неизвестно"
+    template[book_] = {'style': namespace.style,
+                       'author': namespace.author,
+                       'work': namespace.work,
+                       'year': namespace.year}
+    with open(json_file, 'w', encoding="utf-8") as file:
+        json.dump(template, file)
 
 
 # Удаление из библиотеки произведения под номером -bk number
-def delete_from_json_data(json_file: str):
+def delete_from_json_data(json_file: str) -> None:
     parser = create_parser()
     namespace = parser.parse_args()
     with open(json_file, 'r') as file:
         template = json.load(file)
-        with open(json_file, "w", encoding="utf-8") as file:
-            template.pop(namespace.book, None)
-            json.dump(template, file)
+    template.pop(namespace.book, None)
+    with open(json_file, "w", encoding="utf-8") as file:
+        json.dump(template, file)
 
 
 # @line_profile
