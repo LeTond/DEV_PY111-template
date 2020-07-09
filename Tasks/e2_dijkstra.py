@@ -24,8 +24,8 @@ def dijkstra_algo(g: nx.DiGraph, starting_node: Hashable) -> Mapping[Hashable, U
     while exit_:
         exit_ = False
         for i in range(len_g):
-            k = list(g.edges)[i][0]
-            h = list(g.edges)[i][1]
+            k = list(g.edges)[i][0]  # from "A"
+            h = list(g.edges)[i][1]  # to "B"
             if g[k][h]["weight"] + diction[k] < diction[h]:
                 diction[h] = g[k][h]["weight"] + diction[k]
                 exit_ = True
