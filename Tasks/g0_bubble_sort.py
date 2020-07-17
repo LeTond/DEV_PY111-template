@@ -2,6 +2,7 @@ from typing import List
 
 c = [2, 4, 6, 8, -10, 1, 2, 3, 0]
 
+
 def sort(container: List[int]) -> List[int]:
     """
     Sort input container with bubble sort
@@ -11,10 +12,12 @@ def sort(container: List[int]) -> List[int]:
     """
     exit = True
     while exit:
+        n = 0
         exit = False
-        for i in range(1, len(container)):
-            if container[i] < container[i-1]:
-                container[i], container[i-1] = container[i-1], container[i]
+        for i in range(1, len(container) - n):
+            if container[i] < container[i - 1]:
+                container[i], container[i - 1] = container[i - 1], container[i]
+                n += 1
                 exit = True
     return container
 

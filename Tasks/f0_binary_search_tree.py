@@ -4,7 +4,9 @@ or with dicts (smth like {'key': 0, value: 123, 'left': {...}, 'right':{...}})
 """
 
 from typing import Any, Optional, Tuple
-# import networkx as nx
+import networkx as nx
+
+g = nx.Graph()
 
 
 def insert(key: int, value: Any) -> None:
@@ -15,7 +17,8 @@ def insert(key: int, value: Any) -> None:
     :param value: value associated with key
     :return: None
     """
-    print(key, value)
+
+    g.add_node(key, value=value)
     return None
 
 
@@ -26,8 +29,11 @@ def remove(key: int) -> Optional[Tuple[int, Any]]:
     :param key: key to be removed
     :return: deleted (key, value) pair or None
     """
-    print(key)
-    return None
+    if key in g.nodes:
+        deleted_node = g.nodes[key]
+        g.remove_node(key)
+        print(key)
+        return key, deleted_node
 
 
 def find(key: int) -> Optional[Any]:
@@ -37,8 +43,9 @@ def find(key: int) -> Optional[Any]:
     :param key: key for search in the BST
     :return: value associated with the corresponding key
     """
+
     print(key)
-    return None
+    return g.nodes[key]['value']
 
 
 def clear() -> None:
@@ -47,4 +54,7 @@ def clear() -> None:
 
     :return: None
     """
+
+    g.clear()
+
     return None
